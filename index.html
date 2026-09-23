@@ -798,6 +798,10 @@
   // ---- CONFIG: replace with your real inbox before sharing this link ----
   const NOTIFY_EMAIL = "buildworx3@gmail.com";
 
+  // ---- CONFIG: paste your Google Apps Script web app URL here (see apps-script.gs) ----
+  // Leave empty to fall back to FormSubmit.
+  const FORM_ENDPOINT = "https://script.google.com/macros/s/AKfycbwUQkDSwanAluHUEkJ6QiG6NVVmTkKgXSEYgakGwOFHiCl-ZdvNTbsaoojXtfnUyrykTg/exec";
+
   // ---- CONFIG: pause new requests when you're away ----
   // Set enabled to true to block selections. "until" is optional (YYYY-MM-DD) —
   // once that date passes, the page automatically re-enables itself.
@@ -973,22 +977,29 @@ ${notes || '(none)'}`;
     btn.disabled = true;
     lbl.textContent = 'Sending…';
 
-    // Delivered straight to NOTIFY_EMAIL through FormSubmit — no email app needed on the visitor's side.
-    fetch('https://formsubmit.co/ajax/' + encodeURIComponent(NOTIFY_EMAIL), {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify({
-        _subject: subject,
-        _template: 'table',
-        _honey: '',
-        Business: bizName,
-        Name: contactName,
-        Phone: phone,
-        email: email,
-        Wants: items,
-        Notes: notes || '(none)'
-      })
-    })
+    // Delivered straight to NOTIFY_EMAIL, no email app needed on the visitor's side.
+    // Preferred: your own Google Apps Script (FORM_ENDPOINT). Fallback: FormSubmit.
+    const send = FORM_ENDPOINT
+      ? fetch(FORM_ENDPOINT, {
+          method: 'POST',
+          // text/plain keeps this a "simple" request, so the browser skips the CORS preflight Apps Script can't answer
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({
+            subject, business: bizName, name: contactName, phone, email,
+            wants: items, notes: notes || '(none)', website: ''
+          })
+        })
+      : fetch('https://formsubmit.co/ajax/' + encodeURIComponent(NOTIFY_EMAIL), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({
+            _subject: subject, _template: 'table', _honey: '',
+            Business: bizName, Name: contactName, Phone: phone, email: email,
+            Wants: items, Notes: notes || '(none)'
+          })
+        });
+
+    send
       .then(r => r.json().then(j => ({ ok: r.ok && String(j.success) !== 'false', j })))
       .then(({ ok }) => {
         if (!ok) throw new Error('send failed');
