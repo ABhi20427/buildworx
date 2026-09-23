@@ -638,6 +638,83 @@
     .meter .track i, .field label, .field::after { transition: none; }
   }
 
+
+  /* =====================================================
+     RECENT WORK
+     ===================================================== */
+  .work { padding: 76px 0 24px; }
+  .work-grid { display: grid; grid-template-columns: 1.25fr 0.75fr; gap: 40px; align-items: center; }
+  .work .eyebrow { color: var(--gold); font-size: 0.82rem; letter-spacing: 0.14em; text-transform: uppercase; }
+  .work h2 { font-size: 1.9rem; margin-top: 10px; }
+  .work .blurb { margin-top: 14px; color: var(--ink-dim); line-height: 1.6; font-size: 1.02rem; }
+  .work .tags { list-style: none; margin: 20px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .work .tags li {
+    border: 1px solid var(--line); border-radius: 999px; padding: 6px 13px; font-size: 0.82rem; color: var(--ink);
+    background: rgba(76,154,139,0.08);
+  }
+  .work .visit {
+    display: inline-flex; align-items: center; gap: 8px; margin-top: 26px;
+    color: var(--ink); text-decoration: none; font-weight: 600; font-size: 0.95rem;
+    border-bottom: 1px solid var(--gold); padding-bottom: 3px;
+    transition: gap 0.25s ease, color 0.2s ease;
+  }
+  .work .visit:hover { gap: 14px; color: var(--gold); }
+
+  /* Browser-window frame around the screenshot */
+  .browser {
+    display: block; text-decoration: none; position: relative; border-radius: 10px; overflow: hidden;
+    background: var(--navy-2); border: 1px solid var(--line);
+    box-shadow: 0 30px 70px rgba(6,9,20,0.55);
+    transition: transform 0.3s ease-out, box-shadow 0.3s ease,
+      opacity 0.7s ease var(--d, 0s), translate 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) var(--d, 0s);
+    will-change: transform;
+  }
+  .browser:hover { box-shadow: 0 40px 90px rgba(6,9,20,0.65), 0 0 0 1px rgba(76,154,139,0.5); }
+  .browser .bar { display: flex; align-items: center; gap: 12px; padding: 10px 14px; background: #0C1122; border-bottom: 1px solid var(--line); }
+  .browser .bar .dots { display: flex; gap: 6px; }
+  .browser .bar .dots i { width: 9px; height: 9px; border-radius: 50%; background: rgba(236,232,220,0.2); }
+  .browser .bar .dots i:first-child { background: var(--teal); }
+  .browser .bar .dots i:nth-child(2) { background: #C9A24A; }
+  .browser .bar .dots i:nth-child(3) { background: var(--gold); }
+  .browser .bar .url {
+    flex: 1; text-align: center; font-size: 0.74rem; color: var(--ink-dim);
+    background: rgba(236,232,220,0.06); border-radius: 999px; padding: 4px 10px;
+  }
+  .browser .shot { position: relative; overflow: hidden; aspect-ratio: 16 / 10; }
+  .browser .shot img {
+    display: block; width: 100%; height: 100%; object-fit: cover;
+    animation: kenburns 18s ease-in-out infinite alternate;
+  }
+  @keyframes kenburns { from { scale: 1; translate: 0 0; } to { scale: 1.09; translate: -1.5% -1%; } }
+  .browser .shot::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(110deg, transparent 38%, rgba(255,255,255,0.18) 50%, transparent 62%);
+    background-size: 300% 100%; background-position: 130% 0;
+    animation: bxShine 6s ease-in-out 1.5s infinite;
+  }
+  .browser .live {
+    position: absolute; right: 12px; bottom: 12px; display: flex; align-items: center; gap: 7px;
+    background: rgba(16,22,43,0.85); border: 1px solid var(--line); border-radius: 999px;
+    padding: 6px 12px; font-size: 0.76rem; color: var(--ink); z-index: 2;
+    -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  }
+  .browser .live .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); color: var(--gold); animation: ping 2s ease-out infinite; }
+
+  .work .copy .tags li { opacity: 0; translate: 0 10px; transition: opacity 0.5s ease, translate 0.5s ease; }
+  .work .copy.in .tags li { opacity: 1; translate: 0 0; }
+  .work .copy.in .tags li:nth-child(1) { transition-delay: 0.2s; }
+  .work .copy.in .tags li:nth-child(2) { transition-delay: 0.3s; }
+  .work .copy.in .tags li:nth-child(3) { transition-delay: 0.4s; }
+
+  @media (max-width: 760px) {
+    .work { padding: 54px 0 10px; }
+    .work-grid { grid-template-columns: 1fr; gap: 26px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .browser .shot img, .browser .shot::after, .browser .live .dot { animation: none !important; }
+    .work .copy .tags li { opacity: 1; translate: none; transition: none; }
+  }
+
   #confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 100; }
 
   @media (prefers-reduced-motion: reduce) {
@@ -708,6 +785,34 @@
       <li class="rv" style="--d:0.15s"><span class="num">2</span><b>Add your details</b> so we know how to reach you.</li>
       <li class="rv" style="--d:0.3s"><span class="num">3</span><b>We get in touch</b>, usually within a day, with a plan and a price.</li>
     </ol>
+  </div>
+</section>
+
+<section class="work" id="work">
+  <div class="wrap">
+    <div class="work-grid">
+      <a class="browser rv" id="workShot" href="https://www.nitishsolar.com/" target="_blank" rel="noopener" aria-label="Open the Nitish Solar website in a new tab">
+        <div class="bar">
+          <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="url">nitishsolar.com</span>
+        </div>
+        <div class="shot">
+          <img src="work-nitishsolar.webp" width="1200" height="750" alt="Nitish Solar website home page: a hillside home with rooftop solar at sunset" loading="lazy">
+          <span class="live"><span class="dot"></span>Live site</span>
+        </div>
+      </a>
+      <div class="copy rv" style="--d:0.15s">
+        <p class="eyebrow">Recent work</p>
+        <h2>Nitish Solar</h2>
+        <p class="blurb">A complete website for a solar engineering company in India. It includes an interactive savings calculator, a step-by-step diagram of how a solar plant works, and a quote request form.</p>
+        <ul class="tags">
+          <li>Full website</li>
+          <li>Savings calculator</li>
+          <li>Quote form</li>
+        </ul>
+        <a class="visit" href="https://www.nitishsolar.com/" target="_blank" rel="noopener">Visit the live site <span aria-hidden="true">&rarr;</span></a>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -1076,6 +1181,17 @@ ${notes || '(none)'}`;
       c.style.setProperty('--mx', (e.clientX - r.left) + 'px');
       c.style.setProperty('--my', (e.clientY - r.top) + 'px');
     });
+
+    // ---- Recent work: screenshot tilts toward the cursor ----
+    const shot = document.getElementById('workShot');
+    if (shot && fine && !reduce) {
+      shot.addEventListener('pointermove', e => {
+        const r = shot.getBoundingClientRect();
+        const dx = (e.clientX - r.left) / r.width - 0.5, dy = (e.clientY - r.top) / r.height - 0.5;
+        shot.style.transform = 'perspective(1000px) rotateY(' + (dx * 8) + 'deg) rotateX(' + (-dy * 8) + 'deg) translateY(-4px)';
+      });
+      shot.addEventListener('pointerleave', () => { shot.style.transform = ''; });
+    }
 
     const hero = document.querySelector('.hero');
 
