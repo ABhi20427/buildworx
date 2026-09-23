@@ -640,79 +640,118 @@
 
 
   /* =====================================================
-     RECENT WORK
+     RECENT WORK: horizontal, auto-scrolling carousel
      ===================================================== */
-  .work { padding: 76px 0 24px; }
-  .work-grid { display: grid; grid-template-columns: 1.25fr 0.75fr; gap: 40px; align-items: center; }
+  .work { padding: 76px 0 24px; --gutter: max(28px, calc((100vw - 880px) / 2 + 28px)); }
+  .work-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; }
   .work .eyebrow { color: var(--gold); font-size: 0.82rem; letter-spacing: 0.14em; text-transform: uppercase; }
   .work h2 { font-size: 1.9rem; margin-top: 10px; }
-  .work .blurb { margin-top: 14px; color: var(--ink-dim); line-height: 1.6; font-size: 1.02rem; }
-  .work .tags { list-style: none; margin: 20px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
-  .work .tags li {
-    border: 1px solid var(--line); border-radius: 999px; padding: 6px 13px; font-size: 0.82rem; color: var(--ink);
+  .work .work-sub { margin-top: 12px; color: var(--ink-dim); font-size: 1rem; line-height: 1.55; max-width: 46ch; }
+  .work-ctrl { display: flex; gap: 10px; flex: none; }
+  .work-ctrl button {
+    width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line); background: var(--navy-2);
+    color: var(--ink); cursor: pointer; font-size: 1.1rem; line-height: 1;
+    transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+  }
+  .work-ctrl button:hover { border-color: var(--gold); background: rgba(76,154,139,0.14); transform: translateY(-2px); }
+  .work-ctrl button:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+
+  .work-track {
+    display: flex; gap: 22px; margin-top: 34px;
+    padding: 6px var(--gutter) 22px;
+    overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--gutter);
+    scrollbar-width: none; -webkit-overflow-scrolling: touch;
+  }
+  .work-track::-webkit-scrollbar { display: none; }
+  .work-track:focus-visible { outline: 2px solid var(--teal); outline-offset: -2px; }
+
+  .slide {
+    flex: 0 0 min(84vw, 540px); scroll-snap-align: start;
+    display: flex; flex-direction: column; gap: 20px;
+    background: var(--navy-2); border: 1px solid var(--line); border-radius: 14px; padding: 14px 14px 24px;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease,
+      opacity 0.7s ease var(--d, 0s), translate 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) var(--d, 0s);
+  }
+  .slide:hover { border-color: rgba(76,154,139,0.45); box-shadow: 0 24px 60px rgba(6,9,20,0.45); }
+  .slide .info { padding: 0 8px; display: flex; flex-direction: column; flex: 1; }
+  .slide h3 { font-size: 1.45rem; }
+  .slide .blurb { margin-top: 10px; color: var(--ink-dim); line-height: 1.6; font-size: 0.97rem; }
+  .slide .tags { list-style: none; margin: 18px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .slide .tags li {
+    border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; font-size: 0.79rem; color: var(--ink);
     background: rgba(76,154,139,0.08);
   }
-  .work .visit {
-    display: inline-flex; align-items: center; gap: 8px; margin-top: 26px;
-    color: var(--ink); text-decoration: none; font-weight: 600; font-size: 0.95rem;
-    border-bottom: 1px solid var(--gold); padding-bottom: 3px;
+  .slide .tags li.hl { border-color: rgba(76,154,139,0.55); background: rgba(76,154,139,0.18); }
+  .slide .visit { align-self: flex-start; margin-top: auto; padding-top: 22px; }
+  .slide .visit a {
+    display: inline-flex; align-items: center; gap: 8px; color: var(--ink); text-decoration: none;
+    font-weight: 600; font-size: 0.93rem; border-bottom: 1px solid var(--gold); padding-bottom: 3px;
     transition: gap 0.25s ease, color 0.2s ease;
   }
-  .work .visit:hover { gap: 14px; color: var(--gold); }
+  .slide .visit a:hover { gap: 14px; color: var(--gold); }
 
-  /* Browser-window frame around the screenshot */
-  .browser {
-    display: block; text-decoration: none; position: relative; border-radius: 10px; overflow: hidden;
-    background: var(--navy-2); border: 1px solid var(--line);
-    box-shadow: 0 30px 70px rgba(6,9,20,0.55);
-    transition: transform 0.3s ease-out, box-shadow 0.3s ease,
-      opacity 0.7s ease var(--d, 0s), translate 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) var(--d, 0s);
-    will-change: transform;
+  /* feature callout inside a slide */
+  .slide .feature {
+    margin-top: 16px; display: flex; gap: 12px; align-items: flex-start;
+    border: 1px solid rgba(76,154,139,0.4); background: rgba(76,154,139,0.08);
+    border-radius: 10px; padding: 12px 14px; font-size: 0.9rem; line-height: 1.5; color: var(--ink);
   }
-  .browser:hover { box-shadow: 0 40px 90px rgba(6,9,20,0.65), 0 0 0 1px rgba(76,154,139,0.5); }
-  .browser .bar { display: flex; align-items: center; gap: 12px; padding: 10px 14px; background: #0C1122; border-bottom: 1px solid var(--line); }
+  .slide .feature b { color: var(--gold); font-weight: 600; }
+  .slide .feature svg { flex: none; width: 22px; height: 22px; margin-top: 2px; fill: none; stroke: var(--gold); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  .slide .feature .scan { animation: scan 3s ease-in-out infinite; }
+  @keyframes scan { 0%, 100% { translate: 0 -3px; opacity: 0.4; } 50% { translate: 0 4px; opacity: 1; } }
+
+  /* Browser-window frame */
+  .browser {
+    display: block; text-decoration: none; position: relative; border-radius: 9px; overflow: hidden;
+    background: #0C1122; border: 1px solid var(--line);
+    box-shadow: 0 18px 44px rgba(6,9,20,0.5);
+    transition: transform 0.3s ease-out, box-shadow 0.3s ease; will-change: transform;
+  }
+  .browser:hover { box-shadow: 0 26px 60px rgba(6,9,20,0.6), 0 0 0 1px rgba(76,154,139,0.5); }
+  .browser .bar { display: flex; align-items: center; gap: 12px; padding: 9px 13px; background: #0C1122; border-bottom: 1px solid var(--line); }
   .browser .bar .dots { display: flex; gap: 6px; }
-  .browser .bar .dots i { width: 9px; height: 9px; border-radius: 50%; background: rgba(236,232,220,0.2); }
+  .browser .bar .dots i { width: 8px; height: 8px; border-radius: 50%; background: rgba(236,232,220,0.2); }
   .browser .bar .dots i:first-child { background: var(--teal); }
   .browser .bar .dots i:nth-child(2) { background: #C9A24A; }
   .browser .bar .dots i:nth-child(3) { background: var(--gold); }
-  .browser .bar .url {
-    flex: 1; text-align: center; font-size: 0.74rem; color: var(--ink-dim);
-    background: rgba(236,232,220,0.06); border-radius: 999px; padding: 4px 10px;
-  }
+  .browser .bar .url { flex: 1; text-align: center; font-size: 0.72rem; color: var(--ink-dim); background: rgba(236,232,220,0.06); border-radius: 999px; padding: 3px 10px; }
   .browser .shot { position: relative; overflow: hidden; aspect-ratio: 16 / 10; }
-  .browser .shot img {
-    display: block; width: 100%; height: 100%; object-fit: cover;
-    animation: kenburns 18s ease-in-out infinite alternate;
-  }
-  @keyframes kenburns { from { scale: 1; translate: 0 0; } to { scale: 1.09; translate: -1.5% -1%; } }
+  .browser .shot img { display: block; width: 100%; height: 100%; object-fit: cover; animation: kenburns 18s ease-in-out infinite alternate; }
+  @keyframes kenburns { from { scale: 1; translate: 0 0; } to { scale: 1.08; translate: -1.5% -1%; } }
   .browser .shot::after {
     content: ""; position: absolute; inset: 0; pointer-events: none;
     background: linear-gradient(110deg, transparent 38%, rgba(255,255,255,0.18) 50%, transparent 62%);
-    background-size: 300% 100%; background-position: 130% 0;
-    animation: bxShine 6s ease-in-out 1.5s infinite;
+    background-size: 300% 100%; background-position: 130% 0; animation: bxShine 6s ease-in-out 1.5s infinite;
   }
   .browser .live {
-    position: absolute; right: 12px; bottom: 12px; display: flex; align-items: center; gap: 7px;
+    position: absolute; right: 10px; bottom: 10px; z-index: 2; display: flex; align-items: center; gap: 7px;
     background: rgba(16,22,43,0.85); border: 1px solid var(--line); border-radius: 999px;
-    padding: 6px 12px; font-size: 0.76rem; color: var(--ink); z-index: 2;
+    padding: 5px 11px; font-size: 0.74rem; color: var(--ink);
     -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
   }
   .browser .live .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); color: var(--gold); animation: ping 2s ease-out infinite; }
 
-  .work .copy .tags li { opacity: 0; translate: 0 10px; transition: opacity 0.5s ease, translate 0.5s ease; }
-  .work .copy.in .tags li { opacity: 1; translate: 0 0; }
-  .work .copy.in .tags li:nth-child(1) { transition-delay: 0.2s; }
-  .work .copy.in .tags li:nth-child(2) { transition-delay: 0.3s; }
-  .work .copy.in .tags li:nth-child(3) { transition-delay: 0.4s; }
+  /* dots + auto-scroll progress */
+  .work-dots { display: flex; justify-content: center; gap: 10px; margin-top: 4px; }
+  .work-dots button {
+    position: relative; width: 34px; height: 4px; border: 0; padding: 0; border-radius: 4px; cursor: pointer;
+    background: rgba(236,232,220,0.2); overflow: hidden;
+  }
+  .work-dots button::after { content: ""; position: absolute; inset: 0; background: var(--gold); transform: scaleX(0); transform-origin: left; }
+  .work-dots button.on::after { transform: scaleX(1); }
+  .work-dots.auto button.on::after { animation: dotFill var(--dur, 5s) linear forwards; }
+  .work-dots.paused button.on::after { animation-play-state: paused; }
+  @keyframes dotFill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 
-  @media (max-width: 760px) {
+  @media (max-width: 640px) {
     .work { padding: 54px 0 10px; }
-    .work-grid { grid-template-columns: 1fr; gap: 26px; }
+    .work-ctrl { display: none; }
+    .slide { padding: 12px 12px 22px; }
   }
   @media (prefers-reduced-motion: reduce) {
-    .browser .shot img, .browser .shot::after, .browser .live .dot { animation: none !important; }
-    .work .copy .tags li { opacity: 1; translate: none; transition: none; }
+    .browser .shot img, .browser .shot::after, .browser .live .dot, .slide .feature .scan { animation: none !important; }
+    .work-dots.auto button.on::after { animation: none; transform: scaleX(1); }
   }
 
   #confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 100; }
@@ -789,31 +828,59 @@
 </section>
 
 <section class="work" id="work">
-  <div class="wrap">
-    <div class="work-grid">
-      <a class="browser rv" id="workShot" href="https://www.nitishsolar.com/" target="_blank" rel="noopener" aria-label="Open the Nitish Solar website in a new tab">
-        <div class="bar">
-          <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
-          <span class="url">nitishsolar.com</span>
+  <div class="wrap work-head rv">
+    <div>
+      <p class="eyebrow">Recent work</p>
+      <h2>Sites we've built</h2>
+      <p class="work-sub">Real businesses, live today. They scroll on their own, or swipe through them yourself.</p>
+    </div>
+    <div class="work-ctrl">
+      <button type="button" id="workPrev" aria-label="Previous project">&larr;</button>
+      <button type="button" id="workNext" aria-label="Next project">&rarr;</button>
+    </div>
+  </div>
+
+  <div class="work-track" id="workTrack" tabindex="0" role="region" aria-label="Projects, scrolls sideways">
+    <article class="slide rv">
+      <a class="browser" href="https://www.nitishsolar.com/" target="_blank" rel="noopener" aria-label="Open nitishsolar.com in a new tab">
+          <div class="bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="url">nitishsolar.com</span></div>
+          <div class="shot"><img src="work-nitishsolar.webp" width="1040" height="650" alt="Nitish Solar website home page: a hillside home with rooftop solar at sunset" loading="lazy"><span class="live"><span class="dot"></span>Live site</span></div>
+        </a>
+      <div class="info">
+        <h3>Nitish Solar</h3>
+        <p class="blurb">A complete website for a solar engineering company in India, built around tools that help a homeowner decide.</p>
+        <div class="feature">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9h13v-9"/><path class="scan" d="M8 14h8"/></svg>
+          <span><b>Discover Solar:</b> visitors see their own roof, the tool calculates the roof area, and gives an estimated cost.</span>
         </div>
-        <div class="shot">
-          <img src="work-nitishsolar.webp" width="1200" height="750" alt="Nitish Solar website home page: a hillside home with rooftop solar at sunset" loading="lazy">
-          <span class="live"><span class="dot"></span>Live site</span>
-        </div>
-      </a>
-      <div class="copy rv" style="--d:0.15s">
-        <p class="eyebrow">Recent work</p>
-        <h2>Nitish Solar</h2>
-        <p class="blurb">A complete website for a solar engineering company in India. It includes an interactive savings calculator, a step-by-step diagram of how a solar plant works, and a quote request form.</p>
         <ul class="tags">
-          <li>Full website</li>
+          <li class="hl">Roof viewer</li>
+          <li class="hl">Roof area &amp; cost estimate</li>
           <li>Savings calculator</li>
           <li>Quote form</li>
         </ul>
-        <a class="visit" href="https://www.nitishsolar.com/" target="_blank" rel="noopener">Visit the live site <span aria-hidden="true">&rarr;</span></a>
+        <div class="visit"><a href="https://www.nitishsolar.com/" target="_blank" rel="noopener">Visit the live site <span aria-hidden="true">&rarr;</span></a></div>
       </div>
-    </div>
+    </article>
+
+    <article class="slide rv" style="--d:0.12s">
+      <a class="browser" href="https://www.greenrenewsys.com/" target="_blank" rel="noopener" aria-label="Open greenrenewsys.com in a new tab">
+          <div class="bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="url">greenrenewsys.com</span></div>
+          <div class="shot"><img src="work-greenrenewsys.webp" width="1040" height="650" alt="GreenRenewsys website home page: solar panels on a city rooftop under a bright sky" loading="lazy"><span class="live"><span class="dot"></span>Live site</span></div>
+        </a>
+      <div class="info">
+        <h3>GreenRenewsys</h3>
+        <p class="blurb">A clean, professional website for a solar installer in Chennai. It explains residential, commercial and industrial systems, and keeps a quote request and the contact details one tap away.</p>
+        <ul class="tags">
+          <li>Full website</li>
+          <li>Residential · Commercial · Industrial</li>
+          <li>Quote requests</li>
+        </ul>
+        <div class="visit"><a href="https://www.greenrenewsys.com/" target="_blank" rel="noopener">Visit the live site <span aria-hidden="true">&rarr;</span></a></div>
+      </div>
+    </article>
   </div>
+  <div class="work-dots auto" id="workDots" aria-hidden="true"></div>
 </section>
 
 <section class="services" id="request">
@@ -1182,16 +1249,83 @@ ${notes || '(none)'}`;
       c.style.setProperty('--my', (e.clientY - r.top) + 'px');
     });
 
-    // ---- Recent work: screenshot tilts toward the cursor ----
-    const shot = document.getElementById('workShot');
-    if (shot && fine && !reduce) {
-      shot.addEventListener('pointermove', e => {
-        const r = shot.getBoundingClientRect();
-        const dx = (e.clientX - r.left) / r.width - 0.5, dy = (e.clientY - r.top) / r.height - 0.5;
-        shot.style.transform = 'perspective(1000px) rotateY(' + (dx * 8) + 'deg) rotateX(' + (-dy * 8) + 'deg) translateY(-4px)';
+    // ---- Recent work: tilt, plus a carousel that scrolls left to right on its own ----
+    if (fine && !reduce) {
+      document.querySelectorAll('.browser').forEach(b => {
+        b.addEventListener('pointermove', e => {
+          const r = b.getBoundingClientRect();
+          const dx = (e.clientX - r.left) / r.width - 0.5, dy = (e.clientY - r.top) / r.height - 0.5;
+          b.style.transform = 'perspective(1000px) rotateY(' + (dx * 7) + 'deg) rotateX(' + (-dy * 7) + 'deg) translateY(-3px)';
+        });
+        b.addEventListener('pointerleave', () => { b.style.transform = ''; });
       });
-      shot.addEventListener('pointerleave', () => { shot.style.transform = ''; });
     }
+
+    const track = document.getElementById('workTrack');
+    const slides = Array.from(track.querySelectorAll('.slide'));
+    const dotsEl = document.getElementById('workDots');
+    const AUTO_MS = 5500;
+    let cur = 0, timer = null, held = false, inView = false;
+
+    dotsEl.style.setProperty('--dur', AUTO_MS + 'ms');
+    const dots = slides.map((_, i) => {
+      const d = document.createElement('button');
+      d.type = 'button'; d.tabIndex = -1;
+      d.addEventListener('click', () => { goTo(i); restart(); });
+      dotsEl.appendChild(d);
+      return d;
+    });
+
+    function leftFor(i) { return slides[i].offsetLeft - parseFloat(getComputedStyle(track).paddingLeft); }
+    function goTo(i) {
+      cur = (i + slides.length) % slides.length;
+      track.scrollTo({ left: leftFor(cur), behavior: reduce ? 'auto' : 'smooth' });
+      mark();
+    }
+    function mark() {
+      dots.forEach((d, i) => {
+        d.classList.remove('on');
+        if (i === cur) { void d.offsetWidth; d.classList.add('on'); }
+      });
+    }
+    function stop() { clearInterval(timer); timer = null; }
+    function restart() {
+      stop();
+      if (reduce || held || !inView) return;
+      mark();
+      timer = setInterval(() => goTo(cur + 1), AUTO_MS);
+    }
+
+    // keep "current" in sync when the visitor scrolls or swipes by hand
+    let settle;
+    track.addEventListener('scroll', () => {
+      clearTimeout(settle);
+      settle = setTimeout(() => {
+        let best = 0, bestD = Infinity;
+        slides.forEach((sl, i) => { const d = Math.abs(leftFor(i) - track.scrollLeft); if (d < bestD) { bestD = d; best = i; } });
+        // with few slides the track can't scroll far enough to align the last one, so treat "scrolled to the end" as last
+        if (track.scrollLeft >= track.scrollWidth - track.clientWidth - 2) best = slides.length - 1;
+        if (best !== cur) { cur = best; mark(); restart(); }
+      }, 120);
+    }, { passive: true });
+
+    document.getElementById('workPrev').addEventListener('click', () => { goTo(cur - 1); restart(); });
+    document.getElementById('workNext').addEventListener('click', () => { goTo(cur + 1); restart(); });
+
+    // pause while the visitor is looking at or touching a project
+    const hold = v => () => { held = v; dotsEl.classList.toggle('paused', v); if (v) stop(); else restart(); };
+    track.addEventListener('pointerenter', hold(true));
+    track.addEventListener('pointerleave', hold(false));
+    track.addEventListener('focusin', hold(true));
+    track.addEventListener('focusout', hold(false));
+    track.addEventListener('touchstart', hold(true), { passive: true });
+    track.addEventListener('touchend', () => setTimeout(hold(false), 3000), { passive: true });
+    document.addEventListener('visibilitychange', () => { if (document.hidden) stop(); else restart(); });
+
+    // only auto-advance while the section is on screen
+    new IntersectionObserver(en => { inView = en[0].isIntersecting; if (inView) restart(); else stop(); }, { threshold: 0.35 })
+      .observe(document.getElementById('work'));
+    mark();
 
     const hero = document.querySelector('.hero');
 
